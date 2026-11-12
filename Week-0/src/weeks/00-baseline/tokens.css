@@ -1,0 +1,38 @@
+/*
+ * Week 00: Baseline (wireframe)
+ * A deliberately plain greyscale reference. It proves the token contract works and
+ * gives the gallery a "control" to compare every styled week against.
+ */
+[data-theme="w00"] {
+  /* Color: greyscale only, so hierarchy has to come from size, weight and space */
+  --bg: oklch(1 0 0);
+  --fg: oklch(0.2 0 0);             /* softer than #000 and still about 16:1 on white */
+  --muted: oklch(0.48 0 0);         /* secondary text, about 6:1, comfortably AA */
+  --surface: oklch(0.965 0 0);      /* just enough tint to separate cards from the page */
+  --border: oklch(0.86 0 0);
+  --accent: oklch(0.2 0 0);         /* no brand color in a wireframe, so the "accent" is ink */
+  --accent-fg: oklch(1 0 0);
+  --ring: oklch(0.55 0.2 260);      /* the one non-grey value: a focus ring must stand out */
+
+  /* Type: system stack, so we judge layout and not font choice */
+  --display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  /* Scale: ratio 1.25 (major third). cqi = % of the container width, so the hero
+     scales with its frame in the gallery, not with the browser window. */
+  --fs-hero: clamp(2.25rem, 7cqi, 4.25rem);
+  --lh-hero: 1.05;
+  --fs-title: 1.5625rem;            /* 1rem x 1.25^2 */
+  --lh-title: 1.2;
+
+  /* Shape: tiny radius and no shadow. The decoration decisions belong to the styled weeks. */
+  --radius: 4px;
+  --radius-btn: 4px;
+  --shadow: none;
+
+  /* Motion: short and neutral */
+  --dur-fast: 120ms;
+  --dur-base: 240ms;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}

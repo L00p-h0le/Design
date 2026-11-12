@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/* Week themes. Each file scopes its tokens under [data-theme="wXX"]. Add new weeks here. */
+@import "./weeks/00-baseline/tokens.css";
+
+/*
+ * THE TOKEN CONTRACT
+ * ------------------
+ * Every week's tokens.css must define these raw variables:
+ *   colors  : --bg --fg --muted --surface --border --accent --accent-fg --ring
+ *   fonts   : --display --body --mono
+ *   type    : --fs-hero --lh-hero --fs-title --lh-title
+ *   shape   : --radius --radius-btn --shadow
+ *   motion  : --dur-fast --dur-base --ease
+ *
+ * `@theme inline` maps them to Tailwind utilities (bg-bg, text-fg, font-display,
+ * text-hero, rounded-card, shadow-card, ease-style ...). Because it is `inline`,
+ * utilities compile to var(--bg) directly, so they resolve against the nearest
+ * [data-theme] ancestor. Same class names, different look per week.
+ *
+ * Raw names (--bg, --display) must differ from Tailwind's names (--color-bg,
+ * --font-display) or the variable would reference itself.
+ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-ring: var(--ring);
+
+  --font-display: var(--display);
+  --font-body: var(--body);
+  --font-mono: var(--mono);
+
+  --text-hero: var(--fs-hero);
+  --text-hero--line-height: var(--lh-hero);
+  --text-title: var(--fs-title);
+  --text-title--line-height: var(--lh-title);
+
+  --radius-card: var(--radius);
+  --radius-btn: var(--radius-btn);
+  --shadow-card: var(--shadow);
+
+  --ease-style: var(--ease);
+}
+
+/* Lab theme: the chrome around the weeks (home, gallery). Also the fallback for every token. */
+:root,
+[data-theme="lab"] {
+  --bg: oklch(0.985 0.003 85);        /* warm paper, so it reads calmer than pure white */
+  --fg: oklch(0.21 0.01 265);         /* ink with a hint of blue, never pure black */
+  --muted: oklch(0.5 0.012 265);      /* secondary text, about 5.3:1 on --bg (AA) */
+  --surface: oklch(1 0 0);            /* cards lift off the paper by being brighter */
+  --border: oklch(0.9 0.006 265);
+  --accent: oklch(0.5 0.19 268);      /* one indigo signal color for links and active states */
+  --accent-fg: oklch(0.99 0 0);
+  --ring: oklch(0.55 0.2 268);
+
+  --display: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+
+  --fs-hero: clamp(2.5rem, 6vw, 4.5rem);
+  --lh-hero: 1.02;
+  --fs-title: 1.5rem;
+  --lh-title: 1.2;
+
+  --radius: 0.75rem;
+  --radius-btn: 0.5rem;
+  --shadow: 0 1px 2px oklch(0 0 0 / 0.05), 0 4px 16px oklch(0 0 0 / 0.04);
+
+  --dur-fast: 150ms;
+  --dur-base: 300ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root,
+  [data-theme="lab"] {
+    --bg: oklch(0.17 0.006 265);      /* near-black, not #000, so elevation stays visible */
+    --fg: oklch(0.95 0.004 265);
+    --muted: oklch(0.72 0.01 265);
+    --surface: oklch(0.21 0.007 265); /* dark mode: higher elevation = lighter surface */
+    --border: oklch(0.3 0.008 265);
+    --accent: oklch(0.74 0.14 268);
+    --accent-fg: oklch(0.17 0.02 268);
+    --ring: oklch(0.74 0.14 268);
+    --shadow: 0 1px 2px oklch(0 0 0 / 0.4);
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  /* Any themed region paints its own background, text color and body font.
+     html gets the lab theme so overscroll and loading states never flash an unthemed color. */
+  html,
+  [data-theme] {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+  }
+
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Safety net: CSS transitions and animations collapse for reduced-motion users.
+   JS animations handle this themselves (see src/lib/motion.ts). */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
